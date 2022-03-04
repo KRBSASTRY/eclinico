@@ -10,7 +10,9 @@ const userSchema = new mongoose.Schema({
     phoneno:{type: Number , required:[true,"Phone number is required"]},
     age:{type: Number , required:[true,"age is required"]},
     name:{type: String , required:[true,"Name is required"]},
-    status:{type:Boolean, default:true}
+    status:{type:Boolean, default:true},
+    appointmentDetails:{type:Array},
+    wallet:{type:Number,default:0}
 }, { collection: 'usercollection' })
 
 //create  user model

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DoctorService } from 'src/app/doctor.service';
+import { UserService } from 'src/app/user.service';
 
 @Component({
   selector: 'app-accountpage',
@@ -11,29 +12,43 @@ import { DoctorService } from 'src/app/doctor.service';
 export class AccountpageComponent implements OnInit {
 
 
-  accountDetails: any[] = [];
-  wallet: number = 100;
+  accountDetails: any;
+  wallet:number=0;
   value: number = 0;
   valueFromInput: number;
   payment: boolean = false;
 
-  constructor(public serviceObj:DoctorService, public routerObj: Router, public fb: FormBuilder) { }
+  constructor(public serviceObj: DoctorService, public userserviceObj: UserService, public routerObj: Router, public fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.accountDetails.push(this.serviceObj.getAccountPageDetails().getValue())
+    this.accountDetails = this.serviceObj.getAccountPageDetails().getValue()
   }
 
   successfulPayment() {
-    if(this.wallet>=this.accountDetails[0].consultationFee){
-      this.payment=true
-      this.wallet = this.wallet - this.accountDetails[0].consultationFee
+    if (this.wallet >= this.accountDetails.consultationFee) {
+      this.payment = true
+      this.wallet = this.wallet - this.accountDetails.consultationFee
       alert("Payment Successful!")
-      this.serviceObj.appointmentBehaviourSubject.next(this.accountDetails)
-      this.routerObj.navigateByUrl('/userdashboard/appoint')
+      console.log(this.accountDetails, "from accountoage after succeseful");
+      //to add the appointment details to the backend
+      this.userserviceObj.addAppointmentDetails(this.accountDetails).subscribe({
+        next: (res) => {
+          this.routerObj.navigateByUrl('/userdashboard/appoint')
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+      //to update the wallet balance to wallet variable in backend
+      this.userserviceObj.updateWallet(this.accountDetails).subscribe({
+        next: (res) => { console.log(res); },
+        error: (err) => { err }
+      })
+      //update the wallet balance after successful payment
+      
     }
-    
-    else{
-      this.payment=false
+    else {
+      this.payment = false
       alert("Insuficient Balance!")
     }
   }
@@ -51,7 +66,7 @@ export class AccountpageComponent implements OnInit {
   addToWallet() {
     this.valueFromInput = this.AddMOney.value.addMoney
     console.log(this.AddMOney.value.addMoney);
-    this.wallet = this.wallet + this.valueFromInput
+    this.accountDetails.wallet = this.accountDetails.wallet + this.valueFromInput
   }
 
 

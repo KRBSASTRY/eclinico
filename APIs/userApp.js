@@ -7,6 +7,8 @@ const bcryptjs = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const User = require("../models/User")
 userApp.use(exp.json())
+const verifytoken = require("../middlewares/verifyToken")
+
 
 
 //create user - post (signup)
@@ -36,7 +38,6 @@ userApp.post("/createuser", expressAsyncHandler(async (req, res) => {
 
         res.send({ message: "user created", payload: newUserForDb })
     }
-
 }))
 //login user
 userApp.post("/login", expressAsyncHandler(async (req, res) => {
@@ -59,11 +60,11 @@ userApp.post("/login", expressAsyncHandler(async (req, res) => {
         }
         //if passwords match , create token and send response
         else {
-            let signedToken = await jwt.sign({ username: userWaitingToLogin.username }, process.env.SECRET_KEY, { expiresIn: 100 })
+            let signedToken = await jwt.sign({ username: userWaitingToLogin.username }, process.env.SECRET_KEY, { expiresIn: 1120 })
             //create url
-            
 
-            res.send({ message: "login success", token: signedToken, user: userWaitingToLogin})
+            console.log("login success");
+            res.send({ message: "login success", token: signedToken, user: userWaitingToLogin })
         }
 
     }
@@ -83,8 +84,32 @@ userApp.get('/getuser/:username', expressAsyncHandler(async (req, res) => {
     else {
         res.send({ message: "user existed", payload: userFromDb })
     }
+}))
+//update wallet
+userApp.put("/:username/wallet",expressAsyncHandler(async (req,res)=>{
+    //get username from url
+    let userFromUrl = req.params.username
+    let wallet1 = req.body.wallet
+    await User.findOneAndUpdate({username:userFromUrl},{$set:{wallet:wallet1}})
+    let updateUser=await User.findOne({username:userFromUrl}).exec()
+    res.send({payload:updateUser})
+}))
+
+
+userApp.put('/userdashboard/:username', expressAsyncHandler(async (req, res) => {
+    let usernameFromUrl = req.params.username;
+    let appointmentObj = req.body
+    let userFromDb = await User.findOne({ username: usernameFromUrl }).exec()
+    if (userFromDb == null) {
+        res.send({ message: "user dosent exist" })
+    }
+    else {
+        await User.updateOne({ username: usernameFromUrl }, { $push: { appointmentDetails: appointmentObj } })
+        res.send({ message: "successful", payload: { appointmentObj } })
+    }
 
 }))
+
 
 //path not available middleware
 userApp.use((req, res, next) => {

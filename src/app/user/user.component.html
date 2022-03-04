@@ -1,28 +1,42 @@
+<h1 class="heading text-center m-5" data-aos="zoom-out" data-aos-delay="500">No more <span
+        class="headings">Traffic!</span>
+    No more waiting at <span class="headings">Receptions!</span><span class="headings"><br> Book Appointment</span> at
+    your <span class="headings">Doorstep!</span></h1>
+
+
 <!-- select for city -->
-<div class="row">
-    <div class="col">
-        <select name="city" id="city" class="form-select" value="city" (change)="getCity($event)">
-            <option *ngFor="let city1 of city" value={{city1}}>{{city1}}</option>
-        </select>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 mt-4">
+    <div class="col mt-2 justify-content-center d-flex" data-aos="fade-right" data-aos-offset="500"
+        data-aos-delay="150">
+        <form class="w-75">
+            <label for="city" class="form-label names text-center">Select City:</label>
+            <select name="city" id="city" class="form-select p-2" value="city" (change)="getCity($event)">
+                <option *ngFor="let city1 of city" value={{city1}}>{{city1}}</option>
+            </select>
+        </form>
     </div>
 
-    
+
     <!-- select for specialization -->
 
-    <div class="col ">
-        <select name="specialization" id="specialization" class="form-select" value="specialization"
-            (change)="getDataAccSpec($event)">
-            <option *ngFor="let spec of specialization" value={{spec}}>{{spec}}</option>
-        </select>
+    <div class="col mt-2 justify-content-center d-flex" data-aos="fade-left" data-aos-offset="500" data-aos-delay="150">
+        <form action="" class="w-75">
+            <label for="specialization" class="form-label names text-center">Select Specialization:</label>
+            <select name="specialization" id="specialization" class="form-select p-2" value="specialization"
+                (change)="getDataAccSpec($event)">
+                <option *ngFor="let spec of specialization" value={{spec}}>{{spec}}</option>
+            </select>
+        </form>
     </div>
 </div>
 
 <div class="container container1">
-    <div class="card h-100 w-100 mx-auto d-block mt-3" *ngFor="let v of finalDoctors[0]">
+    <div class="card h-100 mx-auto d-block mb-2 mt-3" data-aos="fade-up" data-aos-delay="150"
+        *ngFor="let v of finalDoctors[0]">
         <div class="row row-cols-1 row-cols-sm-1 row-cols-md-3 row-cols-lg-3">
             <div class="col my-auto">
-                <img src="{{v.imgUrl}}" class=" img d-block mx-auto card-img m-3 "
-                    style="max-height: 100px;max-width: 100px;" alt="">
+                <img src="{{v.imgUrl}}" class="d-block mx-auto card-img m-3" style="max-height: 200px;max-width: 200px;"
+                    alt="">
             </div>
             <div class="col">
                 <div class="card-body my-auto">
@@ -45,14 +59,13 @@
 
 
 <div class="container container2">
-    <div class="card h-100 mt-3" *ngFor="let v of finalDoctors[0]">
-        <div class="row g-0">
-            <div class="col">
-                <img src="{{v.imgUrl}}" class="my-auto m-4 card-img img" style="max-height: 200px;max-width: 200px;"
-                    alt="">
-            </div>
+    <div class="card h-100 mb-2 mt-3" data-aos="fade-up" data-aos-delay="150" *ngFor="let v of finalDoctors[0]">
+        <div class="row">
             <div class="col d-flex justify-content-center align-items-center">
-                <div class="card-body my-auto">
+                <div class="largescreencard">
+                    <img src="{{v.imgUrl}}" class="p-4 card-img" style="max-height: 700px;max-width: 700px;" alt="">
+                </div>
+                <div class="card-body">
                     <h5><span class="doctorname">Dr{{v.name}}</span></h5>
                     <h5><span class="details">{{v.specialization}}</span></h5>
                     <h5><span class="details">{{v.experience}} years experience overall </span></h5>
@@ -73,35 +86,38 @@
 
 
 
-<div class="modal " id="modal">
+<div class="modal fade" id="modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header  text-center">
                 <h5 class="modal-title">Book Appointment</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">X</button>
             </div>
             <div class="modal-body text-center" *ngFor="let x of appointmentDataObj">
-                <img class="d-block mx-auto docimg w-50" src="{{x.imgUrl}}" alt="">
-                <p>Name: <span>{{x.name}}</span></p>
-                <p>Specialization: <span>{{x.specialization}}</span></p>
-                <p>Consulatation Fee: <span>{{x.consultationFee}}</span></p>
+                <img class="d-block mx-auto mb-3 w-50" style="border-radius: 25%;" src="{{x.imgUrl}}" alt="">
+                <p><span class="modaltext fw-bold">Name: </span> <span class="yellowtext">{{x.name}}</span></p>
+                <p><span class="modaltext fw-bold">Specialization: </span> <span
+                        class="yellowtext">{{x.specialization}}</span></p>
+                <p><span class="modaltext fw-bold">Consulatation Fee: </span> <span class="yellowtext"><img
+                            src="https://img.icons8.com/material-sharp/24/000000/rupee.png" />{{x.consultationFee}}</span>
+                </p>
                 <form action="" [formGroup]="appointmentForm">
                     <div>
-                        <label for="date" class="form-label">Date of Appointment:</label>
-                        <input type="date" class="form-control" style="border-radius: 10px;" id="date"
+                        <label class="form-label modaltext fw-bold">Date of Appointment:</label>
+                        <input type="date" placeholder="" class="form-control" style="border-radius: 5px;" id="date"
                             formControlName="date">
                     </div>
                     <div>
-                        <label for="age" class="form-label">Timings</label>
-                        <select class="form-select" style="border-radius: 10px;" formControlName="timmings">
+                        <label class="form-label modaltext fw-bold">Timings:</label>
+                        <select class="form-select" style="border-radius: 5px;" formControlName="timmings">
                             <option selected>Select Timmings</option>
                             <option value="9 AM">9 AM</option>
                             <option value="11 AM">11 AM</option>
                             <option value="2 PM">2 PM</option>
                         </select>
                     </div>
-                    <button type="button" (click)="onSubmit()" class="btn btn-success d-block mx-auto mt-3 "
-                        (click)="checkLogin()" data-bs-dismiss="modal">Confirm and Pay</button>
+                    <button type="button" (click)="onSubmit()" class="btn d-block mx-auto mt-3" (click)="checkLogin()"
+                        data-bs-dismiss="modal">Confirm and Pay</button>
                 </form>
             </div>
         </div>

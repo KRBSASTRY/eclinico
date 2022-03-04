@@ -21,11 +21,6 @@ export class DoctorService {
   getDoctorData() {
     return this.doctorBehaviourSubject
   }
-  //get appointment details after successfull payment
-  appointmentBehaviourSubject = new BehaviorSubject(null);
-  getAppointmentDetails() {
-    return this.appointmentBehaviourSubject
-  }
   //getAccountPageDetails
   accountBehaviourSubject = new BehaviorSubject(null);
   getAccountPageDetails() {

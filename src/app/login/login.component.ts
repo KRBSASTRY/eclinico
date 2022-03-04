@@ -40,7 +40,6 @@ export class LoginComponent implements OnInit {
             this.userServiceObj.getUsername().next(res.user)
             this.userServiceObj.getUserType().next(res.user.userType)
             this.routerObj.navigateByUrl(`userdashboard/${res.user.username}`)
-            
           }
           else{
             console.log("Login Failed")

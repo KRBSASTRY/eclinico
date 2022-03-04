@@ -35,21 +35,24 @@ doctorsCity: any[] = [];
 finalDoctors: any[] = [];
 //comment for doctors results
 comment: string = "";
+//usernmae
+username:string="";
+
 
 
 accObj = {
+  username:'',
   doctorname: '',
   consultationFee: 0,
   date: "01/02/2012",
   timmings: "5 am"
-
 };
 
   constructor(public serviceObj: DoctorService,public userServiceObj: UserService, public fb: FormBuilder, public activatedRouteObj: ActivatedRoute, private routerObj: Router) { }
 
   ngOnInit(): void {
     this.getdoctor();
-    
+    this.username=this.userServiceObj.getUsername().getValue().username;
   }
   
   getdoctor() {
@@ -82,6 +85,8 @@ accObj = {
     console.log(this.finalDoctors);
   }
 
+
+  
  
   checkLogin(){
     console.log(this.userServiceObj.loginStatus);
@@ -113,7 +118,7 @@ accObj = {
   })
 
   onSubmit() {
-    console.log(typeof (this.appointmentForm.value.timmings))
+    this.accObj.username=this.username
     this.accObj.timmings = this.appointmentForm.value.timmings
     this.accObj.date = this.appointmentForm.value.date
     for (let v of this.appointmentDataObj) {

@@ -1,0 +1,16 @@
+GET http://localhost:4200/user/getuser/prem
+
+###
+PUT http://localhost:4200/user/ramu
+Content-Type: application/json
+
+{
+    "doctorname":"ramu"
+}
+###
+PUT http://localhost:4200/user/prem/wallet
+Content-Type: application/json
+
+{
+     "wallet":1000000
+}
